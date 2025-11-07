@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1032148113613",
+    "project_id": "loginregister-32eb0",
+    "storage_bucket": "loginregister-32eb0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1032148113613:android:f8de26c9293d7467ec7184",
+        "android_client_info": {
+          "package_name": "me.miguelsolano.unabstore"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOy2Qv6b4e9OJWLsvGqBVfzepmFaxmL7A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
