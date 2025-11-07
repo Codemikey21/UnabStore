@@ -1,55 +1,45 @@
 package me.miguelsolano.unabstore
 
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class ProductViewModel : ViewModel() {
-    private val db = FirebaseFirestore.getInstance()
 
-    // 🔹 Agregar producto
+    private val db = Firebase.firestore
+
+    //  Agregar producto
     fun agregarProducto(producto: Producto, onResult: (Boolean, String) -> Unit) {
         db.collection("Producto")
-            .document("kkTwLwbXb5ZILszN5FCV")
-            .collection("Producto")
-
             .add(producto)
             .addOnSuccessListener {
                 onResult(true, "Producto agregado correctamente")
             }
-            .addOnFailureListener {
-                onResult(false, it.message ?: "Error desconocido")
+            .addOnFailureListener { e: Exception ->
+                onResult(false, "Error al agregar: ${e.message}")
             }
     }
 
-    // 🔹 Escuchar productos en tiempo real
-    fun observarProductosTiempoReal(onChange: (List<Producto>) -> Unit) {
+    //  Listar productos
+    fun obtenerProductos(onResult: (List<Producto>) -> Unit) {
         db.collection("Producto")
-            .document("kkTwLwbXb5ZILszN5FCV")
-            .collection("Producto")
-
-            .addSnapshotListener { snapshot, error ->
-                if (error != null) {
-                    onChange(emptyList())
-                    return@addSnapshotListener
+            .get()
+            .addOnSuccessListener { result ->
+                val productos = result.map { doc ->
+                    doc.toObject(Producto::class.java).copy(id = doc.id)
                 }
-
-                val lista = snapshot?.documents?.mapNotNull { doc ->
-                    doc.toObject(Producto::class.java)?.copy(id = doc.id)
-                } ?: emptyList()
-
-                onChange(lista)
+                onResult(productos)
+            }
+            .addOnFailureListener {
+                onResult(emptyList())
             }
     }
 
-    // 🔹 Eliminar producto
+    //  Eliminar producto
     fun eliminarProducto(id: String, onResult: (Boolean) -> Unit) {
-        db.collection("Producto")
-            .document("kkTwLwbXb5ZILszN5FCV")
-            .collection("Producto")
-
-            .document(id)
+        db.collection("Producto").document(id)
             .delete()
             .addOnSuccessListener { onResult(true) }
-            .addOnFailureListener { onResult(false) }
+            .addOnFailureListener { onResult(false)}
     }
 }
